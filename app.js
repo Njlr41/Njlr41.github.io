@@ -1,6 +1,6 @@
 // OAuth and Google Classroom API setup
-const CLIENT_ID = 'YOUR_CLIENT_ID.apps.googleusercontent.com';
-const REDIRECT_URI = 'https://yourgithubusername.github.io/your-repo';
+const CLIENT_ID = '664739251482-r95afusn4k56l01g6ajhffekkomt9pa0.apps.googleusercontent.com';
+const REDIRECT_URI = 'https://njlr41.github.io/oauth2callback';
 const SCOPES = 'https://www.googleapis.com/auth/classroom.courses.readonly https://www.googleapis.com/auth/classroom.coursework.me.readonly';
 
 // Function to redirect the user to Google for OAuth authentication
