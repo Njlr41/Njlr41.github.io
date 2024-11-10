@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Multi-Timer App</title>
   <style>
-    /* Add some CSS here to style the timers */
     body {
       font-family: Arial, sans-serif;
       display: flex;
@@ -38,17 +37,37 @@
   <button onclick="addTimer()">Add Timer</button>
 
   <script>
-    const timers = [];
+    let timers = [];
 
+    // Load timers from LocalStorage on page load
+    window.onload = function() {
+      const savedTimers = JSON.parse(localStorage.getItem('timers'));
+      if (savedTimers) {
+        timers = savedTimers;
+        timers.forEach((timer, index) => createTimerElement(index, timer.time));
+      }
+    };
+
+    // Save timers to LocalStorage
+    function saveTimersToLocalStorage() {
+      localStorage.setItem('timers', JSON.stringify(timers));
+    }
+
+    // Add a new timer
     function addTimer() {
       const timer = { time: 0, interval: null };
       const index = timers.length;
       timers.push(timer);
+      createTimerElement(index, timer.time);
+      saveTimersToLocalStorage();
+    }
 
+    // Create the timer element in the DOM
+    function createTimerElement(index, time) {
       const timerElement = document.createElement('div');
       timerElement.className = 'timer';
       timerElement.innerHTML = `
-        <p>Timer ${index + 1}: <span id="time-${index}">0</span>s</p>
+        <p>Timer ${index + 1}: <span id="time-${index}">${time}</span>s</p>
         <button onclick="startTimer(${index})">Start</button>
         <button onclick="pauseTimer(${index})">Pause</button>
         <button onclick="resetTimer(${index})">Reset</button>
@@ -56,29 +75,36 @@
       document.getElementById('timers').appendChild(timerElement);
     }
 
+    // Update the displayed time
     function updateTimerDisplay(index) {
       document.getElementById(`time-${index}`).textContent = timers[index].time;
     }
 
+    // Start a timer
     function startTimer(index) {
       if (!timers[index].interval) {
         timers[index].interval = setInterval(() => {
           timers[index].time += 1;
           updateTimerDisplay(index);
+          saveTimersToLocalStorage();  // Save the updated time
         }, 1000);
       }
     }
 
+    // Pause a timer
     function pauseTimer(index) {
       clearInterval(timers[index].interval);
       timers[index].interval = null;
+      saveTimersToLocalStorage();  // Save the paused state
     }
 
+    // Reset a timer
     function resetTimer(index) {
       clearInterval(timers[index].interval);
       timers[index].time = 0;
       timers[index].interval = null;
       updateTimerDisplay(index);
+      saveTimersToLocalStorage();  // Save the reset state
     }
   </script>
 </body>
