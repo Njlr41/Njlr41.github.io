@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Multi-Timer App</title>
+  <style>
+    /* Add some CSS here to style the timers */
+  </style>
+</head>
+<body>
+  <h1>Multi-Timer App</h1>
+  <div id="timers"></div>
+  <button onclick="addTimer()">Add Timer</button>
+
+  <script>
+    const timers = [];
+
+    function addTimer() {
+      const timer = { time: 0, interval: null };
+      const index = timers.length;
+      timers.push(timer);
+
+      const timerElement = document.createElement('div');
+      timerElement.innerHTML = `
+        <p>Timer ${index + 1}: <span id="time-${index}">0</span>s</p>
+        <button onclick="startTimer(${index})">Start</button>
+        <button onclick="pauseTimer(${index})">Pause</button>
+        <button onclick="resetTimer(${index})">Reset</button>
+      `;
+      document.getElementById('timers').appendChild(timerElement);
+    }
+
+    function updateTimerDisplay(index) {
+      document.getElementById(`time-${index}`).textContent = timers[index].time;
+    }
+
+    function startTimer(index) {
+      if (!timers[index].interval) {
+        timers[index].interval = setInterval(() => {
+          timers[index].time += 1;
+          updateTimerDisplay(index);
+        }, 1000);
+      }
+    }
+
+    function pauseTimer(index) {
+      clearInterval(timers[index].interval);
+      timers[index].interval = null;
+    }
+
+    function resetTimer(index) {
+      clearInterval(timers[index].interval);
+      timers[index].time = 0;
+      timers[index].interval = null;
+      updateTimerDisplay(index);
+    }
+  </script>
+</body>
+</html>
