@@ -41,11 +41,9 @@
 
     // Load timers from LocalStorage on page load
     window.onload = function() {
-      const savedTimers = JSON.parse(localStorage.getItem('timers'));
-      if (savedTimers) {
-        timers = savedTimers;
-        timers.forEach((timer, index) => createTimerElement(index, timer.time));
-      }
+      const savedTimers = JSON.parse(localStorage.getItem('timers') || '[]');
+      timers = savedTimers.map(timer => ({ ...timer, interval: null })); // Set interval to null initially
+      timers.forEach((timer, index) => createTimerElement(index, timer.time));
     };
 
     // Save timers to LocalStorage
